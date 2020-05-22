@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.reacher.dao.UserDao">
+
+    <!--定义user的resultMap-->
+    <resultMap id="userAccount" type="user">
+        <id property="id" column="id"></id>
+        <result property="address" column="address"></result>
+        <result property="sex" column="sex"></result>
+        <result property="username" column="username"></result>
+        <result property="birthday" column="birthday"></result>
+
+        <collection property="accounts" ofType="account" select="com.reacher.dao.AccountDao.findAccountByUid" column="id"></collection>
+    </resultMap>
+
+    <select id="findAll" resultMap="userAccount">
+        SELECT * FROM user;
+    </select>
+    
+    <select id="findById" parameterType="int" resultType="user">
+        select * from user where id = #{uid};
+    </select>
+
+</mapper>

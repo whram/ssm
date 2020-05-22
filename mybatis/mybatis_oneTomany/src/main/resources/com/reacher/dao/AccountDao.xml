@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.reacher.dao.AccountDao">
+
+    <!--定义封装account和user的resultMap-->
+    <resultMap id="accountUserMap" type="account">
+        <id property="id" column="aid"></id>
+        <result property="uid" column="uid"></result>
+        <result property="money" column="money"></result>
+
+        <!--一对一的关系映射：配置封装user内容-->
+        <association property="user" column="uid" javaType="com.reacher.domain.User">
+            <id property="id" column="id"></id>
+            <result column="username" property="username"></result>
+            <result column="address" property="address"></result>
+            <result column="sex" property="sex"></result>
+            <result column="birthday" property="birthday"></result>
+        </association>
+    </resultMap>
+    
+    <select id="findAll" resultMap="accountUserMap">
+        SELECT u.*, a.`ID` AS aid, a.uid, a.money FROM user u,account a WHERE u.`id`=a.`UID`
+    </select>
+
+    <!--查询所有包含所有账户，并包含用户名和地址信息-->
+    <select id="findAllAccount" resultType="accountUser">
+        SELECT a.*, u.username, u.address FROM user u,account a WHERE u.`id`=a.`UID`
+    </select>
+
+</mapper>
